@@ -8,6 +8,14 @@ TagManager:
   - Border
   - DangerRailwayCarriage
   - SpawnTrigger
+  - Bridge
+  - Ground
+  - Delete
+  - Spawn
+  - B_Money
+  - S_Money
+  - G_Money
+  - Tuchka
   layers:
   - Default
   - TransparentFX
