@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         transform.Translate(Vector3.right * Time.deltaTime * MovingVagon.speed);
         isPlane = Physics2D.OverlapCircle(planeCheck.position,checkRadius,whatIsPlane);
-        if (Input.GetKeyDown(KeyCode.Space) && _additionalJump>0)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)) && _additionalJump>0)
         {    
             rbPlayer.AddForce(Vector2.up*jumpForse,ForceMode2D.Impulse);
             audio.PlayOneShot(clipJump);
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("G_Money"))
         {
-            GameManager.money = GameManager.money+30;
+            GameManager.money = GameManager.money + 30;
             gameManager._money.text = GameManager.money.ToString();
             Destroy(collision.gameObject);
         }

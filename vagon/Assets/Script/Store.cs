@@ -16,6 +16,7 @@ public class Store : MonoBehaviour
     private int money;
     private int[] cost = {200,500,1000,1500,2000,5000};
 
+
     void Start()
     { 
         audio.volume = PlayerPrefs.GetFloat("Volume");
@@ -81,36 +82,42 @@ public class Store : MonoBehaviour
             S_B[0].SetActive(true);
             GreenButton[0].SetActive(false);
             RedButton[0].SetActive(false);
+       
         }
         if (PlayerPrefs.GetInt("isBuying1") == 1)
         {
             S_B[1].SetActive(true);
             GreenButton[1].SetActive(false);
             RedButton[1].SetActive(false);
+          
         }
         if (PlayerPrefs.GetInt("isBuying2") == 1)
         {
             S_B[2].SetActive(true);
             GreenButton[2].SetActive(false);
             RedButton[2].SetActive(false);
+          
         }
         if (PlayerPrefs.GetInt("isBuying3") == 1)
         {
             S_B[3].SetActive(true);
             GreenButton[3].SetActive(false);
             RedButton[3].SetActive(false);
+           
         }
         if (PlayerPrefs.GetInt("isBuying4") == 1)
         {
             S_B[4].SetActive(true);
             GreenButton[4].SetActive(false);
             RedButton[4].SetActive(false);
+            
         }
         if (PlayerPrefs.GetInt("isBuying5") == 1)
         {
             S_B[5].SetActive(true);
             GreenButton[5].SetActive(false);
             RedButton[5].SetActive(false);
+            
         }
     }
 

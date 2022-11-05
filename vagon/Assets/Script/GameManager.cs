@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject[] playerS;
     [SerializeField] Transform playerPos;
     [SerializeField] Slider sliderVolume;
+    [SerializeField] GameObject hint;
+    [SerializeField] TextMeshProUGUI textRecord;
+    [SerializeField] TextMeshProUGUI Rast;
     private AudioSource music;
 
     public ParticleSystem particle;
@@ -28,15 +33,20 @@ public class GameManager : MonoBehaviour
     public static int money;
     public static int indexSckin;
 
+    private float rast;
+    private float records;
     private float permissibleSpeed = 10;
     private float firstWave = 2;
     private float secondWave = 2.5f;
     private float thirdWave = 3;
-
+   
     private void Start()
     {
+        records = PlayerPrefs.GetFloat("Records");
+        textRecord.text = textRecord.text + records.ToString();
         Instantiate(playerS[PlayerPrefs.GetInt("Player")], new Vector3(playerPos.position.x, playerPos.position.y, playerPos.position.z) ,Quaternion.identity);
         StartCoroutine(IncreaseSpeed());
+        StartCoroutine(DestroyImage());
         //Application.targetFrameRate = 200;  
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         money = PlayerPrefs.GetInt("Money");
@@ -44,6 +54,15 @@ public class GameManager : MonoBehaviour
         music.volume = PlayerPrefs.GetFloat("Volume");
         sliderVolume.value = PlayerPrefs.GetFloat("Volume");
     }
+    private void Update()
+    {
+        if (player.dead!=true)
+        {
+            rast += Time.deltaTime;
+            Rast.text = "счет:" + rast;
+        }
+    }
+    public static GameManager Instance;
 
     IEnumerator IncreaseSpeed()
     {   
@@ -67,10 +86,20 @@ public class GameManager : MonoBehaviour
     }
     // buttons
 
+
+    IEnumerator DestroyImage()
+    {
+        yield return new WaitForSeconds(3);
+        Destroy(hint);
+        StopCoroutine(DestroyImage());
+    }
+
+    
     IEnumerator Wait(float sekond)
     {   
         while (true)
         {
+            Record();
             music.Stop();
             yield return new WaitForSeconds(sekond);
             _stopMenu.gameObject.SetActive(true);
@@ -80,7 +109,14 @@ public class GameManager : MonoBehaviour
             //выключить звуки
         }
     }
-
+    private void Record()
+    {
+        if (records<rast)
+        {
+            PlayerPrefs.SetFloat("Records",rast);
+            rast = 0;
+        }
+    }
     public void Stop()
     {
         _stopMenu.SetActive(true);
@@ -106,7 +142,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        PlayerPrefs.SetInt("Money",money);
+        PlayerPrefs.SetInt("Money", money);
         SceneManager.LoadScene(1);
         MovingVagon.speed = 3;
         Time.timeScale = 1;
@@ -115,13 +151,17 @@ public class GameManager : MonoBehaviour
     public void Change()
     {
         music.volume = sliderVolume.value;
-        player.audio.volume = sliderVolume.value;
+        if (player.audio!=null)
+        {
+            player.audio.volume = sliderVolume.value;
+        }
         PlayerPrefs.SetFloat("Volume", sliderVolume.value);
     }
 
     public void GoToMenu()
-    {
+    {  
         PlayerPrefs.SetInt("Money", money);
         SceneManager.LoadScene(0,LoadSceneMode.Single);
     }
+
 }
